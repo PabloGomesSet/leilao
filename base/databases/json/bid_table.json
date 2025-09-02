@@ -1,0 +1,14 @@
+[
+     {
+          "bid_index": 0
+     },
+     {
+          "bid_index": 1,
+          "auction_key": 1,
+          "auction_date": "02/09/2025 20:18",
+          "winner": "pablo",
+          "product": "caneta",
+          "price": "1",
+          "payment": "True"
+     }
+]
