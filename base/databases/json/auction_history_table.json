@@ -4,8 +4,14 @@
      },
      {
           "auction_index": 1,
-          "auction_date": "02/09/2025 20:18",
-          "name": "1\u00ba noite",
+          "auction_date": "03/09/2025 19:47",
+          "name": "noite 1",
+          "status": false
+     },
+     {
+          "auction_index": 2,
+          "auction_date": "03/09/2025 20:51",
+          "name": "noite 2",
           "status": false
      }
 ]

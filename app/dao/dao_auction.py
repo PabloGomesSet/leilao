@@ -16,7 +16,6 @@ class DaoAuction:
                 return auction
         return None
 
-
     def save_bid(self, bid: Bid):
         dict_list = self.bid_table.read_table()
         dict_list.append(bid.convert_to_dictionary())
@@ -24,3 +23,11 @@ class DaoAuction:
         self.bid_table.write_in_table(dict_list)
         print("Arremate salvo.".upper())
 
+    def change_status_to_false(self, auction: dict):
+        auctions_list = self.auctions_table.read_table()
+
+        for item in auctions_list:
+            if item.get("auction_index") == auction.get("auction_index"):
+                item.update({"status": False})
+
+        self.auctions_table.write_in_table(auctions_list)

@@ -9,6 +9,8 @@ def main():
         auction_cli.create_auction()
     elif auction_cli.args.command == "arremate":
         auction_cli.add_new_bid()
+    elif auction_cli.args.command == "finalizar":
+        auction_cli.end_auction()
 
 def choice_options():
     argument_parser = ArgumentParser()
