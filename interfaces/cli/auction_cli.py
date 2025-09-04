@@ -1,5 +1,4 @@
 from argparse import ArgumentParser
-
 from leilao.app.dao.dao_auction import DaoAuction
 from leilao.app.dao.dao_history_auctions import DaoHistoryAuctions
 from leilao.base.models.auction import Auction
@@ -23,15 +22,22 @@ class AuctionCli:
         self.bid.add_argument("--preço")
         self.bid.add_argument("--pagamento")
 
+        self.see = self.subparser.add_parser("ver")
+
         self.subparser.add_parser("finalizar")
 
         self.args = self.argument_parser.parse_args()
 
 
     def create_auction(self):
-        new_auction = Auction(self.args.nome)
-        self.dao_history_auctions.save_auction(new_auction)
-        print(f'Leilão "{new_auction.name}" está criado e ativo no momento'.upper())
+        current_auction = self.dao_auction.get_active_auction()
+        if not current_auction:
+            new_auction = Auction(self.args.nome)
+            self.dao_history_auctions.save_auction(new_auction)
+            print(f'Leilão "{new_auction.name}" está criado e ativo no momento'.upper())
+        else:
+            print(f'Não é possível abrir um novo leilão enquanto o leilao "{current_auction.get("name")}" estiver'
+                  f' ativo. Você deve finalizá-lo primeiro.'.upper())
 
 
     def add_new_bid(self):
@@ -45,6 +51,22 @@ class AuctionCli:
         else:
             print("Primeiro tem que criar um leilao, parceiro.".upper())
 
+
+    def see_bids(self):
+        bids_list = self.dao_auction.convert_dict_to_bid()
+        current_auction = self.dao_auction.get_active_auction()
+
+        if current_auction:
+            if not bids_list:
+                print("Não há arremates ainda relacionados a este leilao.".upper())
+            else:
+                for bid in bids_list:
+                    print(f"{bid.get("bid_date")} {bid.get("product")} {bid.get("winner")} "
+                          f"{bid.get("price")} {bid.get("payment")}")
+        else:
+            print("Quer ver arremates? tem que abrir um leilao, fera. Não há leilao ativo no momento.".upper())
+
+
     def end_auction(self):
         current_auction = self.dao_auction.get_active_auction()
 
@@ -52,4 +74,4 @@ class AuctionCli:
             self.dao_auction.change_status_to_false(current_auction)
             print("leilao encerrado.".upper())
         else:
-            print(f'Não há leilao ativo no momento'.upper())
+            print(f'Não há o que finalizar. Não há leilao ativo no momento.'.upper())

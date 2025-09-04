@@ -11,6 +11,8 @@ def main():
         auction_cli.add_new_bid()
     elif auction_cli.args.command == "finalizar":
         auction_cli.end_auction()
+    elif auction_cli.args.command == "ver":
+        auction_cli.see_bids()
 
 def choice_options():
     argument_parser = ArgumentParser()

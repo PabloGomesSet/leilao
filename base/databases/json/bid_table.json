@@ -37,5 +37,14 @@
           "price": "35",
           "payment": "True",
           "auction_key": 2
+     },
+     {
+          "bid_index": 5,
+          "bid_date": "04/09/25 09:06",
+          "winner": "pablo",
+          "product": "cajuina",
+          "price": "15",
+          "payment": "True",
+          "auction_key": 1
      }
 ]
