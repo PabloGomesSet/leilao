@@ -13,28 +13,28 @@
      },
      {
           "bid_index": 2,
-          "bid_date": "03/09/25 09:52",
+          "bid_date": "09/09/2025 06:47",
           "winner": "mauricio",
           "product": "doce",
-          "price": "15",
+          "price": 15.0,
           "payment": "True",
           "auction_key": 2
      },
      {
           "bid_index": 3,
-          "bid_date": "03/09/25 09:53",
+          "bid_date": "09/09/2025 06:49",
           "winner": "mateus",
           "product": "pudim",
-          "price": "25",
+          "price": 25.0,
           "payment": "True",
           "auction_key": 2
      },
      {
           "bid_index": 4,
-          "bid_date": "03/09/25 10:17",
+          "bid_date": "09/09/2025 06:50",
           "winner": "felipe",
           "product": "assado de porco",
-          "price": "35",
+          "price": 35.0,
           "payment": "True",
           "auction_key": 2
      },
@@ -46,5 +46,32 @@
           "price": "15",
           "payment": "True",
           "auction_key": 1
+     },
+     {
+          "bid_index": 6,
+          "bid_date": "09/09/2025 06:46",
+          "winner": "mauricio",
+          "product": "cajuina",
+          "price": 19.0,
+          "payment": "True",
+          "auction_key": 2
+     },
+     {
+          "bid_index": 8,
+          "bid_date": "09/09/25 06:52",
+          "winner": "pablo",
+          "product": "pudim",
+          "price": 22.0,
+          "payment": "False",
+          "auction_key": 2
+     },
+     {
+          "bid_index": 10,
+          "bid_date": "09/09/2025 08:30",
+          "winner": "caio",
+          "product": "doce",
+          "price": 35.0,
+          "payment": "True",
+          "auction_key": 2
      }
 ]

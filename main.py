@@ -1,6 +1,8 @@
-from argparse import ArgumentParser
 from leilao.interfaces.cli.auction_cli import AuctionCli
-
+"""
+Pendencias:
+1- Na função editar da cli, fazer a validação da situação em que nao há arremates salvos.
+"""
 
 def main():
     auction_cli = AuctionCli()
@@ -13,16 +15,14 @@ def main():
         auction_cli.end_auction()
     elif auction_cli.args.command == "ver":
         auction_cli.see_bids()
-
-def choice_options():
-    argument_parser = ArgumentParser()
-    argument_parser.add_argument("option", choices= ["novo", "historico"],
-                                 help = "digite 'novo' para criar um novo leilão e 'historico' para "
-                                 "ver todos os leiloes")
-
-    args = argument_parser.parse_args()
-    return args.option
-
+    elif auction_cli.args.command == "buscar":
+        auction_cli.custom_search()
+    elif auction_cli.args.command == "editar":
+        auction_cli.edit_bid()
+    elif auction_cli.args.command == "apagar":
+        auction_cli.delete_bid()
+    elif auction_cli.args.command == "dinheiros":
+        auction_cli.see_total_sum()
 
 if __name__ == "__main__":
 
