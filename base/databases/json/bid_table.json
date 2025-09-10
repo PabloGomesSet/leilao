@@ -57,20 +57,20 @@
           "auction_key": 2
      },
      {
-          "bid_index": 8,
-          "bid_date": "09/09/25 06:52",
-          "winner": "pablo",
-          "product": "pudim",
-          "price": 22.0,
-          "payment": "False",
-          "auction_key": 2
-     },
-     {
           "bid_index": 10,
           "bid_date": "09/09/2025 08:30",
           "winner": "caio",
           "product": "doce",
           "price": 35.0,
+          "payment": "True",
+          "auction_key": 2
+     },
+     {
+          "bid_index": 11,
+          "bid_date": "10/09/25 07:00",
+          "winner": "bruno",
+          "product": "ventilador",
+          "price": 200.0,
           "payment": "True",
           "auction_key": 2
      }

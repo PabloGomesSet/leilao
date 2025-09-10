@@ -2,6 +2,8 @@ from leilao.interfaces.cli.auction_cli import AuctionCli
 """
 Pendencias:
 1- Na função editar da cli, fazer a validação da situação em que nao há arremates salvos.
+2- Editar: apenas pedir dados ao usuário uma unica vez.
+3- Excluir: apenas pedir dados ao usuário uma unica vez.
 """
 
 def main():

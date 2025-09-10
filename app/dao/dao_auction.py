@@ -93,5 +93,8 @@ class DaoAuction:
 
     def sum_bid_values(self):
         bid_list = self.bid_table.read_table()
-        total_sum = sum(item["price"] for item in bid_list)
-        return  total_sum
+        total_sum = 0.0
+
+        for item in bid_list[1:]:
+            total_sum += float(item.get("price"))
+        return total_sum

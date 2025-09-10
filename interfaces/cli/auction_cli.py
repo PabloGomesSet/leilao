@@ -182,6 +182,7 @@ class AuctionCli:
             print(f"Até agora a receita total deste leilao tem sido R$ {total_sum}")
         else:
             print("Só é possível realizar esta operação num leilao ativo.")
+
     def end_auction(self):
         current_auction = self.dao_auction.get_active_auction()
 
