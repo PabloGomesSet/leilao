@@ -1,6 +1,9 @@
+import argparse
 from argparse import ArgumentParser
+from datetime import datetime
 from leilao.app.dao.dao_auction import DaoAuction
 from leilao.app.dao.dao_history_auctions import DaoHistoryAuctions
+from leilao.base.databases.json.bid_table import BidTable
 from leilao.base.models.auction import Auction
 from leilao.base.models.bid import Bid
 
@@ -17,10 +20,10 @@ class AuctionCli:
         self.auction_name.add_argument("--nome")
 
         self.bid = self.subparser.add_parser("arremate")
-        self.bid.add_argument("--arrematante")
-        self.bid.add_argument("--produto")
-        self.bid.add_argument("--preço", type= float)
-        self.bid.add_argument("--pagamento")
+        self.bid.add_argument("arrematante")
+        self.bid.add_argument("produto")
+        self.bid.add_argument("preço", type= float)
+        self.bid.add_argument("pagamento", type = self._get_payment_status)
 
         self.see = self.subparser.add_parser("ver")
 
@@ -34,10 +37,19 @@ class AuctionCli:
         self.search_product.add_argument("product")
 
         self.edit = self.subparser.add_parser("editar")
-        self.edit.add_argument("winner")
+        self.edit.add_argument("data")
+        self.edit.add_argument("arrematante")
+        self.edit.add_argument("produto")
+        self.edit.add_argument("preço", type = float)
+        self.edit.add_argument("pagamento", type= self._get_payment_status)
 
         self.delete = self.subparser.add_parser("apagar")
-        self.delete.add_argument("winner")
+        self.delete.add_argument("data")
+        self.delete.add_argument("arrematante")
+        self.delete.add_argument("produto")
+        self.delete.add_argument("preço", type = float)
+        self.delete.add_argument("pagamento", type= self._get_payment_status)
+
 
         self.total_sum = self.subparser.add_parser("dinheiros")
 
@@ -119,58 +131,51 @@ class AuctionCli:
         current_auction = self.dao_auction.get_active_auction()
 
         if current_auction:
-            bid_list = self.dao_auction.search_for_winner(self.args.winner)
-            bid = bid_list[0]
+            bid_index = self._return_a_index(self.args.data, self.args.arrematante,
+                                             self.args.produto, self.args.preço, self.args.pagamento)
 
-            for index, bid in enumerate(bid_list):
-                print(f"{index}º) - {bid.get("bid_date")} -- {bid.get("winner")} -- "
-                  f"{bid.get("product")} -- {bid.get("price")} -- "
-                  f"{bid.get("payment")}")
+            modified_dict = {"bid_index": bid_index, "bid_date":self.args.data, "winner": self.args.arrematante,
+                             "product": self.args.produto, "price": self.args.preço, "payment": self.args.pagamento,
+                             "auction_key":current_auction.get("auction_index")}
 
-            if len(bid_list) > 1:
-                position_bid = int(input("\nDigite a posição do arremate a ser editado: "))
-                bid = self._return_a_dictionary(position_bid, bid_list)
-
-            print(f"\nSerá editado o arremate: {bid.get("bid_date")} -- {bid.get("winner")} -- "
-                  f"{bid.get("product")} -- {bid.get("price")} -- "
-                  f"{bid.get("payment")}\n")
+            print(f"\nSerá editado o arremate: {modified_dict.get("bid_date")} -- {modified_dict.get("winner")} "
+                  f"-- {modified_dict.get("product")} -- {modified_dict.get("price")} -- "
+                  f"{modified_dict.get("payment")}\n")
 
             new_winner = input("Nome do arrematante: ")
             new_product = input("Nome do produto: ")
-            new_price = float(input("preço: "))
-            new_payment = input("Digite 'True' para pago/ 'False' para nao pago: ")
+            new_price = input("preço: ")
+            value_payment = input("Digite 'True' para pago/ 'False' para nao pago: ")
+            new_payment = self._get_payment_status(value_payment)
 
-
-            self.dao_auction.update_bid(bid, new_winner, new_product,
+            return_edition = self.dao_auction.modify_bid(modified_dict, new_winner, new_product,
                                         new_price, new_payment)
-
-            print("\n O Arremate foi editado.")
+            if return_edition:
+                print("\n O Arremate foi editado.")
+            else:
+                print("Arremate não encontrado")
         else:
-            print("Operação impossível")
+            print("Não há leilão ativo. Operação impossível.")
 
     def delete_bid(self):
         current_auction = self.dao_auction.get_active_auction()
 
         if current_auction:
-            bid_winner_list = self.dao_auction.search_for_winner(self.args.winner)
-            if bid_winner_list:
-                bid = bid_winner_list[0]
+            index = self._return_a_index(self.args.data, self.args.arrematante, self.args.produto,
+                                                    self.args.preço, self.args.pagamento)
 
-                for index, bid in enumerate(bid_winner_list):
-                    print(f"\n{index}: {bid.get("bid_date")} -- {bid.get("winner")} -- {bid.get("product")} "
-                          f"-- {bid.get("price")} -- {bid.get("payment")}")
+            bid_for_deletion = {"bid_index": index, "bid_date":self.args.data, "winner": self.args.arrematante,
+                             "product": self.args.produto, "price": self.args.preço, "payment": self.args.pagamento,
+                             "auction_key":current_auction.get("auction_index")}
 
-                if len(bid_winner_list) > 1:
-                    position = int(input("\nDigite a posição do arremate a ser excluido: "))
-                    bid = self._return_a_dictionary(position, bid_winner_list)
-
-                self.dao_auction.remove_bid(bid)
+            msg_return = self.dao_auction.remove_bid(bid_for_deletion)
+            if msg_return:
                 print("\n Foi excluido o seguinte arremate:")
-                print(f"{bid.get("bid_date")} -- {bid.get("winner")} -- {bid.get("product")} "
-                          f"-- {bid.get("price")} -- {bid.get("payment")}")
-
+                print(f"{bid_for_deletion.get("bid_date")} -- {bid_for_deletion.get("winner")} -- "
+                      f"{bid_for_deletion.get("product")} -- {bid_for_deletion.get("price")} -- "
+                      f"{bid_for_deletion.get("payment")}")
             else:
-                print("Ainda não há arremates salvos.")
+                print("Arremate não encontrado.")
         else:
             print("É preciso antes entrar num leilão.")
 
@@ -192,10 +197,30 @@ class AuctionCli:
         else:
             print(f'Não há o que finalizar. Não há leilao ativo no momento.'.upper())
 
-    def _return_a_dictionary(self, index: int, dict_list: list) -> dict:
-        for position, item in enumerate(dict_list) :
-            if index == position:
-                return item
-        return None
+    def _return_a_index(self, date: datetime, winner, product, price:float, payment) -> int:
+       bids = BidTable().read_table()
+       list_values_bid = [date, winner, product, price, payment]
+
+       for item in bids:
+           l_item = list(item.values())
+           if l_item[1:-1] == list_values_bid:
+               print(f"as listas bateram. retornando o indice {item.get("bid_index")}")
+               print(l_item[1:-1])
+               print(list_values_bid)
+               return item.get("bid_index")
+           else:
+               print(l_item[1:-1])
+               print(list_values_bid)
+               print("as listas nao batem")
+
+       return False
+
+    def _get_payment_status(self, true_or_false):
+        if true_or_false.title() == "True":
+            return True
+        elif true_or_false.title() == "False":
+            return False
+        else:
+            raise argparse.ArgumentTypeError('No campo "Pagamento", só vale digitar "True" ou "False".')
 
 

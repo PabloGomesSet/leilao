@@ -68,12 +68,12 @@ class DaoAuction:
             return product_list
         return False
 
-    def update_bid(self, bid: dict, winner, product, price, payment):
+    def modify_bid(self, bid: dict, winner, product, price, payment):
         bid_list, validator = self.bid_table.read_table(), False
 
         for item in bid_list:
             if item == bid:
-                item.update({"winner": winner, "product": product, "price": price,
+                item.update({"winner": winner, "product": product, "price": float(price),
                              "payment": payment, "bid_date": datetime.now(ZoneInfo("America/Sao_Paulo"))
                              .strftime("%d/%m/%Y %H:%M")})
                 validator = True

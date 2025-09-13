@@ -1,14 +1,11 @@
 [
      {
-          "bid_index": 0
-     },
-     {
           "bid_index": 1,
           "bid_date": "03/09/25 08:47",
           "winner": "pablo",
           "product": "caneta",
           "price": "1",
-          "payment": "True",
+          "payment": true,
           "auction_key": 1
      },
      {
@@ -17,7 +14,7 @@
           "winner": "mauricio",
           "product": "doce",
           "price": 15.0,
-          "payment": "True",
+          "payment": true,
           "auction_key": 2
      },
      {
@@ -26,7 +23,7 @@
           "winner": "mateus",
           "product": "pudim",
           "price": 25.0,
-          "payment": "True",
+          "payment": true,
           "auction_key": 2
      },
      {
@@ -35,7 +32,7 @@
           "winner": "felipe",
           "product": "assado de porco",
           "price": 35.0,
-          "payment": "True",
+          "payment": true,
           "auction_key": 2
      },
      {
@@ -44,7 +41,7 @@
           "winner": "pablo",
           "product": "cajuina",
           "price": "15",
-          "payment": "True",
+          "payment": true,
           "auction_key": 1
      },
      {
@@ -53,16 +50,16 @@
           "winner": "mauricio",
           "product": "cajuina",
           "price": 19.0,
-          "payment": "True",
+          "payment": true,
           "auction_key": 2
      },
      {
           "bid_index": 10,
-          "bid_date": "09/09/2025 08:30",
+          "bid_date": "11/09/2025 09:35",
           "winner": "caio",
           "product": "doce",
-          "price": 35.0,
-          "payment": "True",
+          "price": 39.0,
+          "payment": "False",
           "auction_key": 2
      },
      {
@@ -71,7 +68,34 @@
           "winner": "bruno",
           "product": "ventilador",
           "price": 200.0,
-          "payment": "True",
+          "payment": true,
+          "auction_key": 2
+     },
+     {
+          "bid_index": 12,
+          "bid_date": "10/09/25 07:42",
+          "winner": "lucas",
+          "product": "cruxifixo",
+          "price": 40.0,
+          "payment": true,
+          "auction_key": 2
+     },
+     {
+          "bid_index": 15,
+          "bid_date": "13/09/25 09:13",
+          "winner": "pedro",
+          "product": "cigarro",
+          "price": 16.0,
+          "payment": false,
+          "auction_key": 2
+     },
+     {
+          "bid_index": 16,
+          "bid_date": "13/09/25 09:37",
+          "winner": "ribinha",
+          "product": "chuteira",
+          "price": 250.0,
+          "payment": false,
           "auction_key": 2
      }
 ]
