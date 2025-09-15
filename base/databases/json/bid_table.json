@@ -97,5 +97,32 @@
           "price": 250.0,
           "payment": false,
           "auction_key": 2
+     },
+     {
+          "bid_index": 17,
+          "bid_date": "15/09/25 06:15",
+          "winner": "pablo",
+          "product": "quadro",
+          "price": 250.0,
+          "payment": false,
+          "auction_key": 3
+     },
+     {
+          "bid_index": 18,
+          "bid_date": "15/09/25 06:18",
+          "winner": "maia",
+          "product": "brincos",
+          "price": 40.0,
+          "payment": true,
+          "auction_key": 3
+     },
+     {
+          "bid_index": 19,
+          "bid_date": "15/09/2025 06:53",
+          "winner": "faustino",
+          "product": "biblia",
+          "price": 90.0,
+          "payment": false,
+          "auction_key": 3
      }
 ]

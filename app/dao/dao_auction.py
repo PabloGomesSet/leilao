@@ -91,10 +91,28 @@ class DaoAuction:
                 return True
         return False
 
-    def sum_bid_values(self):
+    def sum_bid_values(self, active_auction_index: int):
         bid_list = self.bid_table.read_table()
         total_sum = 0.0
 
         for item in bid_list[1:]:
-            total_sum += float(item.get("price"))
+            if item.get("auction_key") == active_auction_index:
+                if item.get("payment"):
+                    total_sum += float(item.get("price"))
         return total_sum
+
+    def change_payment_status(self, bid: dict):
+        bid_list = self.bid_table.read_table()
+        current_auction = self.get_active_auction()
+
+        for item in bid_list:
+            if item.get("auction_key") == current_auction.get("auction_index"):
+                if item.get("bid_index") == bid.get("bid_index"):
+                   if item.get("payment"):
+                       item["payment"] = False
+                   else:
+                       item["payment"] = True
+
+                   self.bid_table.write_in_table(bid_list)
+                   return True
+        return False
