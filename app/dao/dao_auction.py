@@ -110,9 +110,10 @@ class DaoAuction:
                 if item.get("bid_index") == bid.get("bid_index"):
                    if item.get("payment"):
                        item["payment"] = False
+                       self.bid_table.write_in_table(bid_list)
+                       return False
                    else:
                        item["payment"] = True
-
-                   self.bid_table.write_in_table(bid_list)
-                   return True
-        return False
+                       self.bid_table.write_in_table(bid_list)
+                       return True
+        return None

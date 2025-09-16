@@ -211,15 +211,7 @@ class AuctionCli:
            l_item = list(item.values())
            if item.get("auction_key") == current_auction.get("auction_index"):
                if l_item[1:-1] == list_values_bid:
-                   print(f"as listas bateram. retornando o indice {item.get("bid_index")}")
-                   print(l_item[1:-1])
-                   print(list_values_bid)
                    return item.get("bid_index")
-               else:
-                   print(l_item[1:-1])
-                   print(list_values_bid)
-                   print("as listas nao batem")
-
        return False
 
     def _get_payment_status(self, true_or_false):
@@ -230,22 +222,25 @@ class AuctionCli:
         else:
             raise argparse.ArgumentTypeError('No campo "Pagamento", só vale digitar "True" ou "False".')
 
-    def pay(self):
+    def to_pay(self):
         current_auction = self.dao_auction.get_active_auction()
 
         if current_auction:
-            index = self._return_a_index(self.args.data. self.args.arrematante, self.args.produto,
+            index = self._return_a_index(self.args.data, self.args.arrematante, self.args.produto,
                                           self.args.preço, self.args.pagamento)
             if index:
                 bid = {"bid_index": index, "bid_date":self.args.data, "winner": self.args.arrematante,
-                                     "product": self.args.produto, "price": self.args.preço, "payment": self.args.pagamento,
-                                     "auction_key":current_auction.get("auction_index")}
+                       "product": self.args.produto, "price": self.args.preço, "payment": self.args.pagamento,
+                       "auction_key":current_auction.get("auction_index")}
 
-                self.dao_auction.change_payment_status(bid)
-
+                return_msg = self.dao_auction.change_payment_status(bid)
+                if return_msg:
+                    print("\n Arremate marcado como pago.")
+                else:
+                    print('\n Desmarcado o campo "Pagamento".')
             else:
                 print("Arremate não encontrado.")
         else:
-            print("\n É preciso antes entrar num leilão.")
+            print("\n É preciso antes criar um novo leilão.")
 
 

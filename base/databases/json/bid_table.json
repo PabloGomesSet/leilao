@@ -95,7 +95,7 @@
           "winner": "ribinha",
           "product": "chuteira",
           "price": 250.0,
-          "payment": false,
+          "payment": true,
           "auction_key": 2
      },
      {
@@ -122,7 +122,7 @@
           "winner": "faustino",
           "product": "biblia",
           "price": 90.0,
-          "payment": false,
+          "payment": true,
           "auction_key": 3
      }
 ]

@@ -23,6 +23,8 @@ def main():
         auction_cli.delete_bid()
     elif auction_cli.args.command == "dinheiros":
         auction_cli.see_total_sum()
+    elif auction_cli.args.command == "pagar":
+        auction_cli.to_pay()
 
 if __name__ == "__main__":
     main()
