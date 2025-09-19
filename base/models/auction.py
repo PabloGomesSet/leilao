@@ -12,12 +12,6 @@ class Auction:
         self.name = name
         self.status = True
 
-    def convert_to_dictionary(self):
-        return {"auction_index":self.auction_index,
-                "auction_date":self.auction_date,
-                "name":self.name,
-                "status": self.status}
-
     def get_last_index(self):
         auctions_table = AuctionsTable().read_table()
 

@@ -9,15 +9,15 @@ from leilao.base.models.bid import Bid
 
 
 class AuctionCli:
-    def __init__(self):
+    def __init__(self, typed_argument: list):
         self.dao_auction = DaoAuction()
         self.dao_history_auctions = DaoHistoryAuctions()
 
         self.argument_parser = ArgumentParser()
         self.subparser = self.argument_parser.add_subparsers(dest="command")
 
-        self.auction_name  = self.subparser.add_parser("leilao")
-        self.auction_name.add_argument("--nome")
+        self.auction_name  = self.subparser.add_parser("novo")
+        self.auction_name.add_argument("nome")
 
         self.bid = self.subparser.add_parser("arremate")
         self.bid.add_argument("arrematante")
@@ -61,7 +61,8 @@ class AuctionCli:
 
         self.subparser.add_parser("finalizar")
 
-        self.args = self.argument_parser.parse_args()
+        self.args = self.argument_parser.parse_args(typed_argument)
+        print(self.args)
 
     def create_auction(self):
         current_auction = self.dao_auction.get_active_auction()

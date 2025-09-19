@@ -95,7 +95,7 @@
           "winner": "ribinha",
           "product": "chuteira",
           "price": 250.0,
-          "payment": true,
+          "payment": false,
           "auction_key": 2
      },
      {
