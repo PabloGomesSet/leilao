@@ -1,10 +1,13 @@
 from argparse import ArgumentParser
 
 from leilao.interfaces.cli.auction_cli import AuctionCli
+from leilao.interfaces.cli.history_auctions_cli import HistoryAuctionCli
+
 """
 Pendencias:
 1- Na função editar da cli, fazer a validação da situação em que nao há arremates salvos.
 """
+
 def load_auction_menu(auction_cli):
     if auction_cli.args.command == "novo":
         auction_cli.create_auction()
@@ -27,7 +30,10 @@ def load_auction_menu(auction_cli):
 
 def main():
     arg_parser = ArgumentParser()
-    arg_parser.add_argument("option", choices=["leilao", "historico"])
+    arg_parser.add_argument("option", choices=["leilao", "historico"],
+                            help= 'Pra começar voce tem que decidir se quer iniciar um novo leilão (digitando '
+                                  'leilao mais a acao a ser realizada: "leilao novo primeiro leilao" ou se quer '
+                                  'ver o historico de leilões: "histórico ver".')
 
     known_arg, unknown_arg = arg_parser.parse_known_args()
 
@@ -39,7 +45,14 @@ def main():
             print('Junto com "leilao" é necessário informar a açao a ser realizada: novo, editar, ver...\n')
 
     elif known_arg.option == "historico":
-        print("Ainda por fazer\n")
+        history_auctions_cli = HistoryAuctionCli(unknown_arg)
+
+        if history_auctions_cli.args.command == "ver":
+            history_auctions_cli.show_auctions()
+        elif history_auctions_cli.args.command == "buscar":
+            history_auctions_cli.custom_search()
+        elif history_auctions_cli.args.command == "arremates":
+            history_auctions_cli.show_bids_auction()
 
 if __name__ == "__main__":
     main()

@@ -117,3 +117,11 @@ class DaoAuction:
                         self.bid_table.write_in_table(bid_list)
                         return True
         return None
+
+    def convert_dict_to_bid(self, dictionary: dict):
+        bid = Bid(dictionary.get("auction_key"), dictionary.get("winner"), dictionary.get("product"),
+                  dictionary.get("price"), dictionary.get("payment"))
+        bid.bid_index = dictionary.get("bid_index")
+        bid.bid_date = dictionary.get("bid_date")
+
+        return bid

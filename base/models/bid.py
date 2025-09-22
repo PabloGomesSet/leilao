@@ -5,7 +5,6 @@ from zoneinfo import ZoneInfo
 from leilao.base.databases.json.bid_table import BidTable
 from leilao.base.models.product import Product
 
-
 class Bid:
     def __init__(self, auction_key, winner, product:Product, price:float, payment: bool):
         self.bid_index = self.set_index()
