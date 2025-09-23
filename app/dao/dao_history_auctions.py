@@ -9,6 +9,7 @@ from leilao.base.models.bid import Bid
 class DaoHistoryAuctions:
     def __init__(self):
         self.auctions_table = AuctionsTable()
+        self.bid_table = BidTable()
         self.dao_auction = DaoAuction()
 
     def save_auction(self, auction: Auction):
@@ -44,6 +45,27 @@ class DaoHistoryAuctions:
             if auction.auction_index == new_bid.auction_key:
                 list_bid_object.append(new_bid)
         return list_bid_object
+
+    def delete_auction(self, auction: Auction):
+        auction_list = self.auctions_table.read_table()
+        dictionary = self._convert_to_dictionary(auction)
+
+        for item in auction_list:
+            if not item.get("status") and item.get("auction_index") == dictionary.get("auction_index"):
+                auction_list.remove(item)
+                self.auctions_table.write_in_table(auction_list)
+                return True
+        return False
+
+    def delete_bids(self, auction: Auction):
+        bids_list = self.bid_table.read_table()
+        dictionary = self._convert_to_dictionary(auction)
+
+        for item in bids_list:
+            if not item.get("status") and item.get("auction_key") == dictionary.get("auction_index"):
+                bids_list.remove(item)
+                self.bid_table.write_in_table(bids_list)
+
 
     def _convert_to_dictionary(self, auction: Auction):
         return {"auction_index":auction.auction_index,

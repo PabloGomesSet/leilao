@@ -1,7 +1,6 @@
 from datetime import datetime
 from operator import itemgetter
 from zoneinfo import ZoneInfo
-
 from leilao.base.databases.json.auctions_table import AuctionsTable
 
 

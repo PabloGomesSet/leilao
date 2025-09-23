@@ -53,6 +53,8 @@ def main():
             history_auctions_cli.custom_search()
         elif history_auctions_cli.args.command == "arremates":
             history_auctions_cli.show_bids_auction()
+        elif history_auctions_cli.args.command == "remover":
+            history_auctions_cli.remove_auction()
 
 if __name__ == "__main__":
     main()

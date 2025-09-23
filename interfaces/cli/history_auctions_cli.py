@@ -18,6 +18,10 @@ class HistoryAuctionCli:
         self.show_bids.add_argument("data")
         self.show_bids.add_argument("nome")
 
+        self.remove = self.subparser.add_parser("remover")
+        self.remove.add_argument("data")
+        self.remove.add_argument("nome")
+
         self.args = argument_parser.parse_args(argument)
         #print("valor do command: ", self.args)
 
@@ -39,7 +43,6 @@ class HistoryAuctionCli:
         else:
             print(f"Não há um leilao com este nome {self.args.nome}.")
 
-
     def show_bids_auction(self):
         auction = self.dao_history_auctions.return_an_auction(self.args.data, self.args.nome)
 
@@ -49,7 +52,16 @@ class HistoryAuctionCli:
             for bid in bid_list:
                 print(f'{bid.bid_date} -- {bid.product} -- {bid.winner}'
                             f' -- {bid.price} -- {bid.payment}')
-                print("_________________________________________\n")
+                print("_____________________________________________\n")
         else:
             print("Opa! Este leilao nao existe.")
 
+    def remove_auction(self):
+        auction = self.dao_history_auctions.return_an_auction(self.args.data, self.args.nome)
+
+        if auction:
+            self.dao_history_auctions.delete_bids(auction)
+            self.dao_history_auctions.delete_auction(auction)
+            print(f'Leilão {auction.name} removido completamente.')
+        else:
+            print("Leilão não encontrado.")
