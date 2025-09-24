@@ -124,14 +124,5 @@
           "price": 90.0,
           "payment": true,
           "auction_key": 3
-     },
-     {
-          "bid_index": 25,
-          "bid_date": "23/09/25 09:05",
-          "winner": "amparo",
-          "product": "bolo",
-          "price": 20.0,
-          "payment": true,
-          "auction_key": 4
      }
 ]

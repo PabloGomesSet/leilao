@@ -46,20 +46,21 @@ class HistoryAuctionCli:
     def show_bids_auction(self):
         auction = self.dao_history_auctions.return_an_auction(self.args.data, self.args.nome)
 
-        print(f'\t\t\t Arremates de "{self.args.nome}"\n')
-        if auction:
+        if auction and not auction.status:
             bid_list = self.dao_history_auctions.list_bids(auction)
+            print(f'\t\t\t Arremates de "{self.args.nome}"\n')
+
             for bid in bid_list:
                 print(f'{bid.bid_date} -- {bid.product} -- {bid.winner}'
                             f' -- {bid.price} -- {bid.payment}')
                 print("_____________________________________________\n")
         else:
-            print("Opa! Este leilao nao existe.")
+            print("\nOpa! Este leilao nao existe.")
 
     def remove_auction(self):
         auction = self.dao_history_auctions.return_an_auction(self.args.data, self.args.nome)
 
-        if auction:
+        if auction and not auction.status:
             self.dao_history_auctions.delete_bids(auction)
             self.dao_history_auctions.delete_auction(auction)
             print(f'Leilão {auction.name} removido completamente.')

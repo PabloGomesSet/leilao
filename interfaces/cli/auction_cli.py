@@ -86,16 +86,17 @@ class AuctionCli:
             print("Primeiro tem que criar um leilao, parceiro.".upper())
 
     def see_bids(self):
-        bids_list = self.dao_auction.return_auction_bids()
         current_auction = self.dao_auction.get_active_auction()
+        auction = self.dao_history_auctions.convert_to_auctions(current_auction)
+        bids_list = self.dao_auction.return_auction_bids(auction)
 
-        if current_auction:
+        if auction:
             if not bids_list:
                 print(f'Não há arremates ainda relacionados a este leilao "{current_auction.get("name")}".'.upper())
             else:
                 for bid in bids_list:
-                    print(f"{bid.get("bid_date")} -- {bid.get("winner")} -- {bid.get("product")}"
-                          f" -- R$ {bid.get("price")} -- {bid.get("payment")}\n")
+                    print(f"{bid.bid_date} -- {bid.winner} -- {bid.product}"
+                          f" -- R$ {bid.price} -- {bid.payment}\n")
         else:
             print("Quer ver arremates? tem que abrir um leilao, fera. No momento nao há leilao ativo.".upper())
 

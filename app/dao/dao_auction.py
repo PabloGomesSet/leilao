@@ -2,6 +2,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 from leilao.base.databases.json.auctions_table import AuctionsTable
 from leilao.base.databases.json.bid_table import BidTable
+from leilao.base.models.auction import Auction
 from leilao.base.models.bid import Bid
 
 
@@ -34,14 +35,15 @@ class DaoAuction:
         self.bid_table.write_in_table(dict_list)
         print("Arremate salvo.".upper())
 
-    def return_auction_bids(self):
+    def return_auction_bids(self, auction: Auction):
         dict_list = self.bid_table.read_table()
-        current_auction, bids_list = self.get_active_auction(), []       
+        bids_list = []
 
-        if current_auction:
-            for dictionary in dict_list:
-                if current_auction.get("auction_index") == dictionary.get("auction_key"):
-                    bids_list.append(dictionary)
+        if auction:
+            for item in dict_list:
+                bid = self.convert_dict_to_bid(item)
+                if auction.auction_index == bid.auction_key:
+                    bids_list.append(bid)
 
         return bids_list
 
