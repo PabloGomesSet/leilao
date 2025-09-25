@@ -88,3 +88,18 @@ class DaoHistoryAuctions:
             if item.get("auction_date") == date and item.get("name") == name:
                 return self.convert_to_auctions(item)
         return False
+
+    def modify_auction(self, auction: Auction):
+        dict_auction = self.convert_to_dictionary(auction)
+        auction_list = self.auctions_table.read_table()
+
+        for item in auction_list:
+            if item.get("auction_index") == dict_auction.get("auction_index"):
+                new_name = input("Novo nome do leilao: ")
+                item.update({"name": new_name})
+
+                self.auctions_table.write_in_table(auction_list)
+
+    def see_revenue(self, auction:Auction):
+        return self.dao_auction.sum_bid_values(auction)
+

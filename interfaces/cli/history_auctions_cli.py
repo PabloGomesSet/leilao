@@ -7,7 +7,12 @@ class HistoryAuctionCli:
         self.dao_history_auctions = DaoHistoryAuctions()
 
         argument_parser = ArgumentParser()
-        self.subparser = argument_parser.add_subparsers(dest= "command")
+        self.subparser = argument_parser.add_subparsers(dest= "command", help= '1- "ver" para visualizar toda a lista '
+                                                                               'de leilões ja realizados\n2- "arremates" '
+                                                                               'para ver os arremates de um determnado '
+                                                                               'leilao\n 3- "remover" para apagar um leilao '
+                                                                               'e os seus arremates\n 4- "editar" para mudar '
+                                                                               'o nome de um leilao')
 
         self.see_auction = self.subparser.add_parser("ver")
 
@@ -21,6 +26,15 @@ class HistoryAuctionCli:
         self.remove = self.subparser.add_parser("remover")
         self.remove.add_argument("data")
         self.remove.add_argument("nome")
+
+        self.edit_name = self.subparser.add_parser("editar")
+        self.edit_name.add_argument("data")
+        self.edit_name.add_argument("nome")
+
+        self.revenue = self.subparser.add_parser("dinheiros")
+        self.revenue.add_argument("data")
+        self.revenue.add_argument("nome")
+
 
         self.args = argument_parser.parse_args(argument)
         #print("valor do command: ", self.args)
@@ -66,3 +80,21 @@ class HistoryAuctionCli:
             print(f'Leilão {auction.name} removido completamente.')
         else:
             print("Leilão não encontrado.")
+
+    def edit_auction(self):
+        auction = self.dao_history_auctions.return_an_auction(self.args.data, self.args.nome)
+
+        if auction and not auction.status:
+            self.dao_history_auctions.modify_auction(auction)
+        else:
+            print("Leilão nao encontrado.")
+
+    def see_total_revenue(self):
+        auction = self.dao_history_auctions.return_an_auction(self.args.data, self.args.nome)
+
+        if auction and not auction.status:
+            revenue = self.dao_history_auctions.see_revenue(auction)
+
+            print(f"O Valor total arrecadado neste leilão foi R$ {revenue}")
+        else:
+            print("Leilão nao encontrado.")

@@ -187,10 +187,11 @@ class AuctionCli:
             print("É preciso antes entrar num leilão.")
 
     def see_total_sum(self):
-        current_auction = self.dao_auction.get_active_auction()
+        dictionary = self.dao_auction.get_active_auction()
+        current_auction = self.dao_history_auctions.convert_to_auctions(dictionary)
 
         if current_auction:
-            total_sum = self.dao_auction.sum_bid_values(current_auction.get("auction_index"))
+            total_sum = self.dao_auction.sum_bid_values(current_auction)
             print(f"Até agora a receita total deste leilao tem sido R$ {total_sum}")
         else:
             print("Só é possível realizar esta operação num leilao ativo.")

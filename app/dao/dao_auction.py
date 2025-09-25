@@ -1,5 +1,7 @@
 from datetime import datetime
 from zoneinfo import ZoneInfo
+
+
 from leilao.base.databases.json.auctions_table import AuctionsTable
 from leilao.base.databases.json.bid_table import BidTable
 from leilao.base.models.auction import Auction
@@ -10,6 +12,7 @@ class DaoAuction:
     def __init__(self):
         self.bid_table = BidTable()
         self.auctions_table = AuctionsTable()
+
 
     def get_active_auction(self):
         auctions_list = self.auctions_table.read_table()
@@ -93,14 +96,15 @@ class DaoAuction:
                 return True
         return False
 
-    def sum_bid_values(self, active_auction_index: int):
+    def sum_bid_values(self,auction: Auction) -> float:
         bid_list = self.bid_table.read_table()
         total_sum = 0.0
 
-        for item in bid_list[1:]:
-            if item.get("auction_key") == active_auction_index:
-                if item.get("payment"):
-                    total_sum += float(item.get("price"))
+        for item in bid_list:
+            bid = self.convert_dict_to_bid(item)
+            if bid.auction_key == auction.auction_index:
+                if bid.payment:
+                    total_sum += float(bid.price)
         return total_sum
 
     def change_payment_status(self, bid: dict):

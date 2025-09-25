@@ -55,6 +55,10 @@ def main():
             history_auctions_cli.show_bids_auction()
         elif history_auctions_cli.args.command == "remover":
             history_auctions_cli.remove_auction()
+        elif history_auctions_cli.args.command == "editar":
+            history_auctions_cli.edit_auction()
+        elif history_auctions_cli.args.command == "dinheiros":
+            history_auctions_cli.see_total_revenue()
 
 if __name__ == "__main__":
     main()

@@ -4,7 +4,7 @@
           "bid_date": "03/09/25 08:47",
           "winner": "pablo",
           "product": "caneta",
-          "price": "1",
+          "price": 2,
           "payment": true,
           "auction_key": 1
      },
@@ -40,7 +40,7 @@
           "bid_date": "04/09/25 09:06",
           "winner": "pablo",
           "product": "cajuina",
-          "price": "15",
+          "price": 15,
           "payment": true,
           "auction_key": 1
      },
@@ -59,7 +59,7 @@
           "winner": "caio",
           "product": "doce",
           "price": 39.0,
-          "payment": "False",
+          "payment": false,
           "auction_key": 2
      },
      {

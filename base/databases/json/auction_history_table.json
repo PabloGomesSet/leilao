@@ -17,7 +17,7 @@
      {
           "auction_index": 3,
           "auction_date": "04/09/2025 19:51",
-          "name": "noite 3",
-          "status": false
+          "name": "noite03",
+          "status": true
      }
 ]
