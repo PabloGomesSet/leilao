@@ -3,6 +3,7 @@ from argparse import ArgumentParser
 from datetime import datetime
 from leilao.app.dao.dao_auction import DaoAuction
 from leilao.app.dao.dao_history_auctions import DaoHistoryAuctions
+from leilao.base.adapter.adapters import convert_to_auctions, convert_dict_to_bid
 from leilao.base.databases.json.bid_table import BidTable
 from leilao.base.models.auction import Auction
 from leilao.base.models.bid import Bid
@@ -62,43 +63,42 @@ class AuctionCli:
         self.subparser.add_parser("finalizar")
 
         self.args = self.argument_parser.parse_args(typed_argument)
-        print(self.args)
+
 
     def create_auction(self):
         current_auction = self.dao_auction.get_active_auction()
         if not current_auction:
             new_auction = Auction(self.args.nome)
             self.dao_history_auctions.save_auction(new_auction)
-            print(f'Leilão "{new_auction.name}" está criado e ativo no momento'.upper())
+            print(f'\nLeilão "{new_auction.name}" está criado e ativo no momento'.upper())
         else:
-            print(f'Não é possível abrir um novo leilão enquanto o leilao "{current_auction.get("name")}" estiver'
+            print(f'\nNão é possível abrir um novo leilão enquanto o leilao "{current_auction.name}" estiver'
                   f' ativo. Primeiro você deve finalizá-lo.'.upper())
 
     def add_new_bid(self):
         auction = self.dao_auction.get_active_auction()
 
-        if auction and auction.get("status"):
-            new_bid = Bid(auction.get("auction_index"),self.args.arrematante,
+        if auction and auction.status:
+            new_bid = Bid(auction.auction_index,self.args.arrematante,
                           self.args.produto, self.args.preço, self.args.pagamento)
 
             self.dao_auction.save_bid(new_bid)
         else:
-            print("Primeiro tem que criar um leilao, parceiro.".upper())
+            print("\nPrimeiro tem que criar um leilao, parceiro.".upper())
 
     def see_bids(self):
         current_auction = self.dao_auction.get_active_auction()
-        auction = self.dao_history_auctions.convert_to_auctions(current_auction)
-        bids_list = self.dao_auction.return_auction_bids(auction)
+        bids_list = self.dao_auction.return_auction_bids(current_auction)
 
-        if auction:
+        if current_auction:
             if not bids_list:
-                print(f'Não há arremates ainda relacionados a este leilao "{current_auction.get("name")}".'.upper())
+                print(f'\nNão há arremates ainda relacionados a este leilao "{current_auction.name}".'.upper())
             else:
                 for bid in bids_list:
                     print(f"{bid.bid_date} -- {bid.winner} -- {bid.product}"
                           f" -- R$ {bid.price} -- {bid.payment}\n")
         else:
-            print("Quer ver arremates? tem que abrir um leilao, fera. No momento nao há leilao ativo.".upper())
+            print("\nQuer ver arremates? tem que abrir um leilao, fera. No momento nao há leilao ativo.".upper())
 
     def custom_search(self):
         if self.args.criterion == "arrematante":
@@ -114,8 +114,8 @@ class AuctionCli:
         if current_auction:
             if bid_list:
                 for bid in bid_list:
-                    print(f"{bid.get("bid_date")} {bid.get("product")} {bid.get("winner")} "
-                          f"{bid.get("price")} {bid.get("payment")}")
+                    print(f"{bid.bid_date} {bid.product} {bid.winner} "
+                          f"{bid.price} {bid.payment}")
             else:
                 print(f'Não há este arrematante "{self.args.winner}"')
         else:
@@ -128,8 +128,8 @@ class AuctionCli:
         if current_auction:
             if bid_list:
                 for bid in bid_list:
-                    print(f"{bid.get("bid_date")} {bid.get("product")} {bid.get("winner")} "
-                          f"{bid.get("price")} {bid.get("payment")}")
+                    print(f"{bid.bid_date} {bid.product} {bid.winner} "
+                          f"{bid.price} {bid.payment}")
             else:
                 print(f'Não há este produto "{self.args.product}"')
         else:
@@ -145,7 +145,7 @@ class AuctionCli:
             if bid_index:
                 modified_dict = {"bid_index": bid_index, "bid_date":self.args.data, "winner": self.args.arrematante,
                                  "product": self.args.produto, "price": self.args.preço, "payment": self.args.pagamento,
-                                 "auction_key":current_auction.get("auction_index")}
+                                 "auction_key":current_auction.auction_index}
 
                 print(f"\nSerá editado o arremate: {modified_dict.get("bid_date")} -- {modified_dict.get("winner")} "
                       f"-- {modified_dict.get("product")} -- {modified_dict.get("price")} -- "
@@ -162,7 +162,7 @@ class AuctionCli:
             else:
                 print("\nArremate não encontrado")
         else:
-            print("Não há leilão ativo. Operação impossível.")
+            print("\nNão há leilão ativo. Operação impossível.")
 
     def delete_bid(self):
         current_auction = self.dao_auction.get_active_auction()
@@ -173,7 +173,7 @@ class AuctionCli:
 
             bid_for_deletion = {"bid_index": index, "bid_date":self.args.data, "winner": self.args.arrematante,
                              "product": self.args.produto, "price": self.args.preço, "payment": self.args.pagamento,
-                             "auction_key":current_auction.get("auction_index")}
+                             "auction_key":current_auction.auction_index}
 
             msg_return = self.dao_auction.remove_bid(bid_for_deletion)
             if msg_return:
@@ -187,19 +187,18 @@ class AuctionCli:
             print("É preciso antes entrar num leilão.")
 
     def see_total_sum(self):
-        dictionary = self.dao_auction.get_active_auction()
-        current_auction = self.dao_history_auctions.convert_to_auctions(dictionary)
+        current_auction = self.dao_auction.get_active_auction()
 
         if current_auction:
             total_sum = self.dao_auction.sum_bid_values(current_auction)
-            print(f"Até agora a receita total deste leilao tem sido R$ {total_sum}")
+            print(f"\nAté agora a receita total deste leilao tem sido R$ {total_sum}")
         else:
-            print("Só é possível realizar esta operação num leilao ativo.")
+            print("\nSó é possível realizar esta operação num leilao ativo.")
 
     def end_auction(self):
         current_auction = self.dao_auction.get_active_auction()
 
-        if current_auction and current_auction.get("status") == True:
+        if current_auction and current_auction.status:
             self.dao_auction.change_status_to_false(current_auction)
             print("leilao encerrado.".upper())
         else:
@@ -211,10 +210,11 @@ class AuctionCli:
        current_auction = self.dao_auction.get_active_auction()
 
        for item in bids:
-           l_item = list(item.values())
-           if item.get("auction_key") == current_auction.get("auction_index"):
-               if l_item[1:-1] == list_values_bid:
-                   return item.get("bid_index")
+           bid = convert_dict_to_bid(item)
+           itens_list = [bid.bid_date, bid.winner, bid.product, bid.price, bid.payment]
+           if bid.auction_key == current_auction.auction_index:
+               if itens_list == list_values_bid:
+                   return bid.bid_index
        return False
 
     def _get_payment_status(self, true_or_false):
@@ -232,17 +232,17 @@ class AuctionCli:
             index = self._return_a_index(self.args.data, self.args.arrematante, self.args.produto,
                                           self.args.preço, self.args.pagamento)
             if index:
-                bid = {"bid_index": index, "bid_date":self.args.data, "winner": self.args.arrematante,
+                dict_bid = {"bid_index": index, "bid_date":self.args.data, "winner": self.args.arrematante,
                        "product": self.args.produto, "price": self.args.preço, "payment": self.args.pagamento,
-                       "auction_key":current_auction.get("auction_index")}
+                       "auction_key":current_auction.auction_index}
 
-                return_msg = self.dao_auction.change_payment_status(bid)
+                return_msg = self.dao_auction.change_payment_status(convert_dict_to_bid(dict_bid))
                 if return_msg:
                     print("\n Arremate marcado como pago.")
                 else:
                     print('\n Desmarcado o campo "Pagamento".')
             else:
-                print("Arremate não encontrado.")
+                print("\nArremate não encontrado.")
         else:
             print("\n É preciso antes criar um novo leilão.")
 

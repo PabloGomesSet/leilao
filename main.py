@@ -28,6 +28,20 @@ def load_auction_menu(auction_cli):
     elif auction_cli.args.command == "pagar":
         auction_cli.to_pay()
 
+def load_history_menu(history_auctions_cli):
+    if history_auctions_cli.args.command == "ver":
+        history_auctions_cli.show_auctions()
+    elif history_auctions_cli.args.command == "buscar":
+        history_auctions_cli.custom_search()
+    elif history_auctions_cli.args.command == "arremates":
+        history_auctions_cli.show_bids_auction()
+    elif history_auctions_cli.args.command == "remover":
+        history_auctions_cli.remove_auction()
+    elif history_auctions_cli.args.command == "editar":
+        history_auctions_cli.edit_auction()
+    elif history_auctions_cli.args.command == "dinheiros":
+        history_auctions_cli.see_total_revenue()
+
 def main():
     arg_parser = ArgumentParser()
     arg_parser.add_argument("option", choices=["leilao", "historico"],
@@ -46,19 +60,7 @@ def main():
 
     elif known_arg.option == "historico":
         history_auctions_cli = HistoryAuctionCli(unknown_arg)
-
-        if history_auctions_cli.args.command == "ver":
-            history_auctions_cli.show_auctions()
-        elif history_auctions_cli.args.command == "buscar":
-            history_auctions_cli.custom_search()
-        elif history_auctions_cli.args.command == "arremates":
-            history_auctions_cli.show_bids_auction()
-        elif history_auctions_cli.args.command == "remover":
-            history_auctions_cli.remove_auction()
-        elif history_auctions_cli.args.command == "editar":
-            history_auctions_cli.edit_auction()
-        elif history_auctions_cli.args.command == "dinheiros":
-            history_auctions_cli.see_total_revenue()
+        load_history_menu(history_auctions_cli)
 
 if __name__ == "__main__":
     main()

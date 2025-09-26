@@ -15,15 +15,6 @@ class Bid:
         self.price = price
         self.payment = payment
 
-    def convert_to_dictionary(self):
-        return {"bid_index": self.bid_index,
-                "bid_date": self.bid_date,
-                "winner": self.winner,
-                "product": self.product,
-                "price":self.price,
-                "payment": self.payment,
-                "auction_key": self.auction_key}
-
     def get_last_index(self):
         bid_table = BidTable().read_table()
 

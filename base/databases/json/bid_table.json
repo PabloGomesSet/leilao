@@ -1,14 +1,5 @@
 [
      {
-          "bid_index": 1,
-          "bid_date": "03/09/25 08:47",
-          "winner": "pablo",
-          "product": "caneta",
-          "price": 2,
-          "payment": true,
-          "auction_key": 1
-     },
-     {
           "bid_index": 2,
           "bid_date": "09/09/2025 06:47",
           "winner": "mauricio",
@@ -34,15 +25,6 @@
           "price": 35.0,
           "payment": true,
           "auction_key": 2
-     },
-     {
-          "bid_index": 5,
-          "bid_date": "04/09/25 09:06",
-          "winner": "pablo",
-          "product": "cajuina",
-          "price": 15,
-          "payment": true,
-          "auction_key": 1
      },
      {
           "bid_index": 6,
@@ -124,5 +106,32 @@
           "price": 90.0,
           "payment": true,
           "auction_key": 3
+     },
+     {
+          "bid_index": 20,
+          "bid_date": "25/09/25 09:52",
+          "winner": "maria",
+          "product": "bolo",
+          "price": 20.0,
+          "payment": true,
+          "auction_key": 4
+     },
+     {
+          "bid_index": 21,
+          "bid_date": "25/09/25 09:52",
+          "winner": "lara",
+          "product": "assado",
+          "price": 50.0,
+          "payment": true,
+          "auction_key": 4
+     },
+     {
+          "bid_index": 22,
+          "bid_date": "26/09/2025 10:21",
+          "winner": "pedro",
+          "product": "escova",
+          "price": 15.0,
+          "payment": true,
+          "auction_key": 4
      }
 ]

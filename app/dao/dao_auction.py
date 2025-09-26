@@ -1,7 +1,6 @@
 from datetime import datetime
 from zoneinfo import ZoneInfo
-
-
+from leilao.base.adapter.adapters import convert_to_auctions, convert_dict_to_bid, convert_bid_to_dictionary
 from leilao.base.databases.json.auctions_table import AuctionsTable
 from leilao.base.databases.json.bid_table import BidTable
 from leilao.base.models.auction import Auction
@@ -13,27 +12,27 @@ class DaoAuction:
         self.bid_table = BidTable()
         self.auctions_table = AuctionsTable()
 
-
     def get_active_auction(self):
-        auctions_list = self.auctions_table.read_table()
+        dict_list = self.auctions_table.read_table()
 
-        for auction in auctions_list:
-            if auction.get("status"):
-                return auction
+        for item in dict_list:
+            if item.get("status"):
+                return convert_to_auctions(item)
         return False
 
-    def change_status_to_false(self, auction: dict):
+    def change_status_to_false(self, auction: Auction):
         auctions_list = self.auctions_table.read_table()
 
-        for item in auctions_list:
-            if item.get("auction_index") == auction.get("auction_index"):
+        for item in auctions_list[1:]:
+            item_obj = convert_to_auctions(item)
+            if item_obj.auction_index == auction.auction_index:
                 item.update({"status": False})
 
         self.auctions_table.write_in_table(auctions_list)
 
     def save_bid(self, bid: Bid):
         dict_list = self.bid_table.read_table()
-        dict_list.append(bid.convert_to_dictionary())
+        dict_list.append(convert_bid_to_dictionary(bid))
 
         self.bid_table.write_in_table(dict_list)
         print("Arremate salvo.".upper())
@@ -44,7 +43,7 @@ class DaoAuction:
 
         if auction:
             for item in dict_list:
-                bid = self.convert_dict_to_bid(item)
+                bid = convert_dict_to_bid(item)
                 if auction.auction_index == bid.auction_key:
                     bids_list.append(bid)
 
@@ -57,8 +56,9 @@ class DaoAuction:
         winner_list = []
         if auction:
             for item in dict_list:
-                if item.get("auction_key") == auction.get("auction_index") and item.get("winner") == winner:
-                    winner_list.append(item)
+                bid = convert_dict_to_bid(item)
+                if bid.auction_key == auction.auction_index and bid.winner == winner:
+                    winner_list.append(bid)
             return winner_list
         return False
 
@@ -68,8 +68,9 @@ class DaoAuction:
         
         if auction:
             for item in dict_list:
-                if item.get("auction_key") == auction.get("auction_index") and item.get("product") == product:
-                    product_list.append(item)
+                bid = convert_dict_to_bid(item)
+                if bid.auction_key == auction.auction_index and bid.product == product:
+                    product_list.append(bid)
             return product_list
         return False
 
@@ -101,20 +102,21 @@ class DaoAuction:
         total_sum = 0.0
 
         for item in bid_list:
-            bid = self.convert_dict_to_bid(item)
+            bid = convert_dict_to_bid(item)
             if bid.auction_key == auction.auction_index:
                 if bid.payment:
                     total_sum += float(bid.price)
         return total_sum
 
-    def change_payment_status(self, bid: dict):
+    def change_payment_status(self, b: Bid):
         bid_list = self.bid_table.read_table()
         current_auction = self.get_active_auction()
 
         for item in bid_list:
-            if item.get("auction_key") == current_auction.get("auction_index"):
-                if item.get("bid_index") == bid.get("bid_index"):
-                    if item.get("payment"):
+            bid_new = convert_dict_to_bid(item)
+            if bid_new.auction_key == current_auction.auction_index:
+                if bid_new.bid_index == b.bid_index:
+                    if bid_new.payment:
                         item["payment"] = False
                         self.bid_table.write_in_table(bid_list)
                         return False
@@ -124,10 +126,3 @@ class DaoAuction:
                         return True
         return None
 
-    def convert_dict_to_bid(self, dictionary: dict):
-        bid = Bid(dictionary.get("auction_key"), dictionary.get("winner"), dictionary.get("product"),
-                  dictionary.get("price"), dictionary.get("payment"))
-        bid.bid_index = dictionary.get("bid_index")
-        bid.bid_date = dictionary.get("bid_date")
-
-        return bid
