@@ -133,5 +133,95 @@
           "price": 15.0,
           "payment": true,
           "auction_key": 4
+     },
+     {
+          "bid_index": 23,
+          "bid_date": "27/09/25 10:05",
+          "winner": "pudim",
+          "product": "pedro",
+          "price": 20.0,
+          "payment": true,
+          "auction_key": 5
+     },
+     {
+          "bid_index": 24,
+          "bid_date": "27/09/25 10:09",
+          "winner": "doce",
+          "product": "pedro",
+          "price": 40.0,
+          "payment": true,
+          "auction_key": 5
+     },
+     {
+          "bid_index": 25,
+          "bid_date": "29/09/25 08:28",
+          "winner": "celular",
+          "product": "jefersson",
+          "price": 300.0,
+          "payment": true,
+          "auction_key": 5
+     },
+     {
+          "bid_index": 26,
+          "bid_date": "29/09/25 08:29",
+          "winner": "celular",
+          "product": "jefersson",
+          "price": 300.0,
+          "payment": true,
+          "auction_key": 5
+     },
+     {
+          "bid_index": 27,
+          "bid_date": "29/09/25 08:46",
+          "winner": "balde",
+          "product": "ana",
+          "price": 30.0,
+          "payment": true,
+          "auction_key": 5
+     },
+     {
+          "bid_index": 28,
+          "bid_date": "30/09/25 09:11",
+          "winner": "pablo",
+          "product": "garrafa",
+          "price": 20.0,
+          "payment": true,
+          "auction_key": 5
+     },
+     {
+          "bid_index": 29,
+          "bid_date": "30/09/25 09:12",
+          "winner": "pablo",
+          "product": "garrafa",
+          "price": 20.0,
+          "payment": true,
+          "auction_key": 5
+     },
+     {
+          "bid_index": 30,
+          "bid_date": "30/09/25 09:14",
+          "winner": "pablo",
+          "product": "garrafa",
+          "price": 20.0,
+          "payment": true,
+          "auction_key": 5
+     },
+     {
+          "bid_index": 31,
+          "bid_date": "01/10/25 08:04",
+          "winner": "meia",
+          "product": "neymar",
+          "price": 20.0,
+          "payment": true,
+          "auction_key": 5
+     },
+     {
+          "bid_index": 32,
+          "bid_date": "02/10/25 08:06",
+          "winner": "batom",
+          "product": "itala",
+          "price": 40.0,
+          "payment": true,
+          "auction_key": 5
      }
 ]

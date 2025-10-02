@@ -3,6 +3,7 @@ from zoneinfo import ZoneInfo
 from leilao.base.adapter.adapters import convert_to_auctions, convert_dict_to_bid, convert_bid_to_dictionary
 from leilao.base.databases.json.auctions_table import AuctionsTable
 from leilao.base.databases.json.bid_table import BidTable
+from leilao.base.databases.spreasheets.functions import update_spreadsheets
 from leilao.base.models.auction import Auction
 from leilao.base.models.bid import Bid
 
@@ -35,6 +36,8 @@ class DaoAuction:
         dict_list.append(convert_bid_to_dictionary(bid))
 
         self.bid_table.write_in_table(dict_list)
+        update_spreadsheets(dict_list)
+
         print("Arremate salvo.".upper())
 
     def return_auction_bids(self, auction: Auction):
@@ -94,6 +97,7 @@ class DaoAuction:
             if item.get("bid_index") == bid.get("bid_index"):
                 bid_list.remove(item)
                 self.bid_table.write_in_table(bid_list)
+                update_spreadsheets(bid_list)
                 return True
         return False
 
